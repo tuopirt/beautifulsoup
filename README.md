@@ -44,3 +44,5 @@ to run only the new tests:
 ```
 python -m pytest bs4/tests/test_soupreplacer1.py bs4/tests/test_soupreplacer2.py
 ```
+
+Used AI only In creation of README
