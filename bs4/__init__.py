@@ -1085,8 +1085,12 @@ class BeautifulSoup(Tag):
         if self.replacer is not None:
             name = self.replacer.replace(name)
 
+            if self.replacer.name_xformer is not None:
+                for t in self.tagStack[::-1]:
+                    if t.name != self.ROOT_TAG_NAME and t.prefix == nsprefix:
+                        name = t.name
+                        break
 
-            
         self._popToTag(name, nsprefix)
 
     def handle_data(self, data: str) -> None:
