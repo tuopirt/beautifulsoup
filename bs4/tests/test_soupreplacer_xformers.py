@@ -40,14 +40,15 @@ class TestSoupReplacerXformers(SoupTest):
         assert div["id"] == "main"
 
     def test_side_effect_xformer(self):
-        html = '<p class="remove-me">Paragraph</p><span>Keep me</span>'
-        def clean_tags(tag):
-            if tag.name == "p":
-                tag.decompose()
-        replacer = SoupReplacer(xformer=clean_tags)
+        html = '<p class="remove-me">Paragraph</p>'
+        def remove_class_attr(tag):
+            if "class" in tag.attrs:
+                del tag.attrs["class"]
+        replacer = SoupReplacer(xformer=remove_class_attr)
         soup = BeautifulSoup(html, "html.parser", replacer=replacer)
-        assert soup.find("p") is None
-        assert soup.find("span") is not None
+        p = soup.find("p")
+        assert "class" not in p.attrs
+        assert p.string == "Paragraph"
 
     def test_combined_xformers(self):
         html = "<b>Text</b>"

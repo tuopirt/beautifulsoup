@@ -1051,6 +1051,10 @@ class BeautifulSoup(Tag):
         )
         if tag is None:
             return tag
+        if self._most_recent_element is not None:
+            self._most_recent_element.next_element = tag
+        self._most_recent_element = tag
+        self.pushTag(tag)
 
         if self.replacer is not None:
             if self.replacer.name_xformer is not None:
@@ -1066,10 +1070,7 @@ class BeautifulSoup(Tag):
             if self.replacer.xformer is not None:
                 self.replacer.xform(tag)
         
-        if self._most_recent_element is not None:
-            self._most_recent_element.next_element = tag
-        self._most_recent_element = tag
-        self.pushTag(tag)
+        
         return tag
 
     def handle_endtag(self, name: str, nsprefix: Optional[str] = None) -> None:
