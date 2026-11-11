@@ -311,18 +311,50 @@ class StringMatchRule(MatchRule):
 
 
 class SoupReplacer(ElementFilter):
-    def __init__(self, og_tag: str, alt_tag: str):
-        if not isinstance(og_tag, str) or not isinstance(alt_tag, str):
-            raise TypeError("SoupReplacer tag names must be strings.")
-        if not og_tag or not alt_tag:
-            raise ValueError("SoupReplacer tag names cannot be empty.")
+    def __init__(self, 
+                og_tag: str, 
+                alt_tag: str,
+                name_xformer: Optional[Callable[[Tag], str]] = None,
+                attrs_xformer: Optional[Callable[[Tag], Dict[str, Any]]] = None,
+                xformer: Optional[Callable[[Tag], None]] = None,
+                ):
+        if og_tag is not None or alt_tag is not None:
+            if not isinstance(og_tag, str) or not isinstance(alt_tag, str):
+                raise TypeError("SoupReplacer tag names must be strings.")
+            if not og_tag or not alt_tag:
+                raise ValueError("SoupReplacer tag names cannot be empty.")
+            
         self.og_tag = og_tag
         self.alt_tag = alt_tag
+        self.name_xformer = name_xformer
+        self.attrs_xformer = attrs_xformer
+        self.xformer = xformer
+
+        if og_tag is not None and alt_tag is not None and name_xformer is None:
+            self.name_xformer = lambda tag: alt_tag if tag.name == og_tag else tag.name
 
     def replace(self, tag_name: str) -> str:
         if tag_name == self.og_tag:
             return self.alt_tag
         return tag_name
+
+    # name_xformer and attrs_xformer return replacements for the tag’s name and attributes
+    def xform_name(self, tag: Tag) -> str:
+        if self.name_xformer is not None:
+            return self.name_xformer(tag)
+        return tag.name
+
+    def xform_attrs(self, tag: Tag, attrs: _RawAttributeValues) -> _RawAttributeValues:
+        if self.attrs_xformer is not None:
+            new_attrs = self.attrs_xformer(tag)
+            if new_attrs is not None:
+                return new_attrs
+        return attrs
+
+    # xformer is a more powerful function that can have side effects on the tag and doesn’t return anything.
+    def xform(self, tag: Tag) -> None:
+        if self.xformer is not None:
+            self.xformer(tag)
 
 
 class SoupStrainer(ElementFilter):
