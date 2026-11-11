@@ -312,8 +312,8 @@ class StringMatchRule(MatchRule):
 
 class SoupReplacer(ElementFilter):
     def __init__(self, 
-                og_tag: str, 
-                alt_tag: str,
+                og_tag: Optional[str] = None, 
+                alt_tag: Optional[str] = None,
                 name_xformer: Optional[Callable[[Tag], str]] = None,
                 attrs_xformer: Optional[Callable[[Tag], Dict[str, Any]]] = None,
                 xformer: Optional[Callable[[Tag], None]] = None,
