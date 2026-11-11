@@ -1051,6 +1051,21 @@ class BeautifulSoup(Tag):
         )
         if tag is None:
             return tag
+
+        if self.replacer is not None:
+            if self.replacer.name_xformer is not None:
+                new_name = self.replacer.xform_name(tag)
+                if new_name != tag.name:
+                    tag.name = new_name
+
+            if self.replacer.attrs_xformer is not None:
+                new_attrs = self.replacer.xform_attrs(tag, tag.attrs)
+                tag.attrs.clear()
+                tag.attrs.update(new_attrs)
+
+            if self.replacer.xformer is not None:
+                self.replacer.xform(tag)
+        
         if self._most_recent_element is not None:
             self._most_recent_element.next_element = tag
         self._most_recent_element = tag
@@ -1069,6 +1084,9 @@ class BeautifulSoup(Tag):
         self.endData()
         if self.replacer is not None:
             name = self.replacer.replace(name)
+
+
+            
         self._popToTag(name, nsprefix)
 
     def handle_data(self, data: str) -> None:
