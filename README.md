@@ -2,8 +2,9 @@
 
 - `apps/m2/`: Task scripts and README for Milestone 2 tasks.
 - `apps/m3/`: Task scripts and technical brief for Milestone 3 tasks (`task7.py` and `M3-README.md`).
-- `bs4/`: Beautiful Soup source code with expanded `SoupReplacer` functional transformers (`name_xformer`, `attrs_xformer`, `xformer`).
-- `bs4/tests/`: 2 `SoupReplacer` tests: `test_soupreplacer1.py` and `test_soupreplacer2.py`. 1 `test_soupreplacer_xformers.py` to test transformers
+- `apps/m4/`: Technical brief for Milestone 4 (`M4-README.md`).
+- `bs4/`: Beautiful Soup source code with expanded `SoupReplacer` functional transformers (`name_xformer`, `attrs_xformer`, `xformer`) and iterable `BeautifulSoup`.
+- `bs4/tests/`: 2 `SoupReplacer` tests: `test_soupreplacer1.py` and `test_soupreplacer2.py`. 1 `test_soupreplacer_xformers.py` to test transformers. 1 `test_soup_iter.py` to test `BeautifulSoup` iteration.
 
 ## Installation
 

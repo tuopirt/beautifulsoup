@@ -311,6 +311,7 @@ class BeautifulSoup(Tag):
                 "XML."
             )
 
+
         def deprecated_argument(old_name: str, new_name: str) -> Optional[Any]:
             if old_name in kwargs:
                 warnings.warn(
@@ -493,6 +494,10 @@ class BeautifulSoup(Tag):
         self.markup = None
         self.builder.soup = None
 
+    def __iter__(self):
+        for element in self.descendants:
+            yield element
+    
     def copy_self(self) -> "BeautifulSoup":
         """Create a new BeautifulSoup object with the same TreeBuilder,
         but not associated with any markup.
